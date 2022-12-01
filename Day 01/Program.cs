@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace Day_01
 {
@@ -32,6 +33,8 @@ namespace Day_01
             elfCals.Sort();
 
             Console.WriteLine(elfCals[elfCals.Count - 1] + elfCals[elfCals.Count - 2] + elfCals[elfCals.Count - 3]);
+
+            Console.ReadKey();
         }
     }
 }
