@@ -86,14 +86,30 @@ namespace Day_05
             Console.WriteLine(inputCrates.Select((a) => { return prettyCrateLine(a); }).Aggregate((a, b) => { return a + "\n" + b; }));
             Console.WriteLine(inputCommands.Aggregate((a, b) => { return a + "\n" + b; }));
 
-            // Load the commands
+            // Execute the commands (part 1)
+            //foreach (string c in inputCommands)
+            //{
+            //    var parts = c.Split(' ');
+
+            //    for (int i = 0; i < int.Parse(parts[0]); i++)
+            //    {
+            //        stacks[int.Parse(parts[2]) - 1].Push(stacks[int.Parse(parts[1]) - 1].Pop());
+            //    }
+            //}
+
+            // Execute the commands (part 2)
+            Stack<string> tempStack = new Stack<string>();
             foreach (string c in inputCommands)
             {
                 var parts = c.Split(' ');
 
                 for (int i = 0; i < int.Parse(parts[0]); i++)
                 {
-                    stacks[int.Parse(parts[2]) - 1].Push(stacks[int.Parse(parts[1]) - 1].Pop());
+                    tempStack.Push(stacks[int.Parse(parts[1]) - 1].Pop());
+                }
+                for (int i = 0; i < int.Parse(parts[0]); i++)
+                {
+                    stacks[int.Parse(parts[2]) - 1].Push(tempStack.Pop());
                 }
             }
 
