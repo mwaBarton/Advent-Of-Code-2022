@@ -22,6 +22,7 @@ namespace Day_08
             int[,] trees = new int[input[0].Length, input.Length];
             char[,] visibility = new char[trees.GetLength(0), trees.GetLength(1)];
             int[,] lowestOuterTree = new int[trees.GetLength(0), trees.GetLength(1)];
+            int[,] treesSeen = new int[trees.GetLength(0), trees.GetLength(1)];
 
             for (int y = 0; y < input.Length; y++)
             {
@@ -41,6 +42,7 @@ namespace Day_08
             }
 
             bool changed = false;
+            int highestScenicScore = 0;
             do
             {
                 changed = false;
@@ -55,6 +57,16 @@ namespace Day_08
                             if (trees[x, y] <= trees[x, i]) vis = false;
                         }
                         if (vis) visibility[x, y] = 'T';
+                        int upCount = 0;
+                        for (int i = y - 1; i >= 0; i--)
+                        {
+                            if (trees[x, y] > trees[x, i]) upCount++;
+                            else
+                            {
+                                upCount++;
+                                break;
+                            }
+                        }
 
                         // Search down
                         vis = true;
@@ -63,6 +75,16 @@ namespace Day_08
                             if (trees[x, y] <= trees[x, i]) vis = false;
                         }
                         if (vis) visibility[x, y] = 'T';
+                        int downCount = 0;
+                        for (int i = y + 1; i < trees.GetLength(1); i++)
+                        {
+                            if (trees[x, y] > trees[x, i]) downCount++;
+                            else
+                            {
+                                downCount++;
+                                break;
+                            }
+                        }
 
                         // Search left
                         vis = true;
@@ -71,6 +93,16 @@ namespace Day_08
                             if (trees[x, y] <= trees[i, y]) vis = false;
                         }
                         if (vis) visibility[x, y] = 'T';
+                        int leftCount = 0;
+                        for (int i = x - 1; i >= 0; i--)
+                        {
+                            if (trees[x, y] > trees[i, y]) leftCount++;
+                            else
+                            {
+                                leftCount++;
+                                break;
+                            }
+                        }
 
                         // Search right
                         vis = true;
@@ -79,6 +111,20 @@ namespace Day_08
                             if (trees[x, y] <= trees[i, y]) vis = false;
                         }
                         if (vis) visibility[x, y] = 'T';
+                        int rightCount = 0;
+                        for (int i = x + 1; i < trees.GetLength(0); i++)
+                        {
+                            if (trees[x, y] > trees[i, y]) rightCount++;
+                            else
+                            {
+                                rightCount++;
+                                break;
+                            }
+                        }
+
+                        int scenicScore = upCount * downCount * leftCount * rightCount;
+                        Console.WriteLine($"At [{x}, {y}]: up: {upCount}, down: {downCount}, left: {leftCount}, right: {rightCount}, scenicScore: {scenicScore}");
+                        if (scenicScore > highestScenicScore) highestScenicScore = scenicScore;
 
                         //int min = Math.Min(lowestOuterTree[x - 1, y],
                         //        Math.Min(lowestOuterTree[x + 1, y],
@@ -182,6 +228,8 @@ namespace Day_08
                 Console.WriteLine();
             }
             Console.WriteLine($"Part 1: {count}");
+
+            Console.WriteLine($"Part 2: {highestScenicScore}");
 
             Console.ReadKey();
         }
