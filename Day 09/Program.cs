@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 
 namespace Day_09
@@ -30,13 +27,15 @@ namespace Day_09
                     // just right
                     tail.x += 1;
                     return true;
-                } else if (head.y == tail.y - 2)
+                }
+                else if (head.y == tail.y - 2)
                 {
                     // right and above
                     tail.x += 1;
                     tail.y -= 1;
                     return true;
-                } else if (head.y == tail.y + 2)
+                }
+                else if (head.y == tail.y + 2)
                 {
                     // right and below
                     tail.x += 1;
@@ -123,7 +122,7 @@ namespace Day_09
             return false;
         }
 
-        static void Main(string[] args)
+        static void Part1()
         {
             var input = File.ReadAllLines("input.txt");
 
@@ -132,12 +131,12 @@ namespace Day_09
 
             Dictionary<Point, int> visitedPoints = new Dictionary<Point, int>();
 
-            foreach(string motion in input)
+            foreach (string motion in input)
             {
                 char dir = motion[0];
                 int d = int.Parse(motion.Substring(2));
 
-                Console.WriteLine($"Next move: {motion}");
+                //Console.WriteLine($"Next move: {motion}");
 
                 for (int i = 0; i < d; i++)
                 {
@@ -170,7 +169,7 @@ namespace Day_09
                     }
                     if (!found) visitedPoints.Add(new Point(tail.x, tail.y), 1);
 
-                    Console.WriteLine($"Head is now at ({head.x}, {head.y}) - tail is now at ({tail.x}, {tail.y})");
+                    //Console.WriteLine($"Head is now at ({head.x}, {head.y}) - tail is now at ({tail.x}, {tail.y})");
                 }
             }
 
@@ -181,6 +180,75 @@ namespace Day_09
             }
 
             Console.WriteLine(total);
+        }
+
+        static void Part2()
+        {
+            var input = File.ReadAllLines("input.txt");
+
+            Point[] knots = new Point[10];
+
+            Dictionary<Point, int> visitedPoints = new Dictionary<Point, int>();
+
+            foreach (string motion in input)
+            {
+                char dir = motion[0];
+                int d = int.Parse(motion.Substring(2));
+
+                //Console.WriteLine($"Next move: {motion}");
+
+                for (int i = 0; i < d; i++)
+                {
+                    switch (dir)
+                    {
+                        case 'L':
+                            knots[0].x -= 1;
+                            break;
+                        case 'R':
+                            knots[0].x += 1;
+                            break;
+                        case 'U':
+                            knots[0].y -= 1;
+                            break;
+                        case 'D':
+                            knots[0].y += 1;
+                            break;
+                    }
+
+                    for (int j = 1; j < knots.Length; j++)
+                    {
+                        UpdateTailPos(knots[j - 1], ref knots[j]);
+                    }
+
+                    bool found = false;
+                    foreach (var point in visitedPoints.Keys)
+                    {
+                        if (point.x == knots[9].x && point.y == knots[9].y)
+                        {
+                            visitedPoints[point] += 1;
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) visitedPoints.Add(new Point(knots[9].x, knots[9].y), 1);
+
+                    //Console.WriteLine($"Head is now at ({head.x}, {head.y}) - tail is now at ({tail.x}, {tail.y})");
+                }
+            }
+
+            int total = 0;
+            foreach (var point in visitedPoints.Keys)
+            {
+                total += 1;
+            }
+
+            Console.WriteLine(total);
+        }
+
+        static void Main(string[] args)
+        {
+            Part1();
+            Part2();
 
             Console.ReadKey();
         }
